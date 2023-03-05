@@ -1,27 +1,14 @@
+val projectGroup: String by project
+val projectVersion: String by project
+
 plugins {
     kotlin("jvm") version "1.8.0"
     application
 }
 
-group = "io.craigmiller160"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
-}
+group = projectGroup
+version = projectVersion
 
 dependencies {
     testImplementation(kotlin("test"))
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-
-kotlin {
-    jvmToolchain(8)
-}
-
-application {
-    mainClass.set("MainKt")
 }
