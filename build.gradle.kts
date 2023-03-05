@@ -10,4 +10,5 @@ version = projectVersion
 
 dependencies {
     testImplementation(kotlin("test"))
+    implementation(gradleApi())
 }
