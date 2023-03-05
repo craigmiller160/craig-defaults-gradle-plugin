@@ -1,3 +1,11 @@
+val projectName: String by settings
 
-rootProject.name = "craig-defaults-gradle-plugin"
+rootProject.name = projectName
+
+pluginManagement {
+    val kotlinVersion: String by settings
+    plugins {
+        kotlin("jvm") version kotlinVersion
+    }
+}
 

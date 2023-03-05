@@ -2,8 +2,7 @@ val projectGroup: String by project
 val projectVersion: String by project
 
 plugins {
-    kotlin("jvm") version "1.8.0"
-    application
+    kotlin("jvm")
 }
 
 group = projectGroup
