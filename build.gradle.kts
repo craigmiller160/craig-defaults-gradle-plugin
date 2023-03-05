@@ -4,6 +4,7 @@ val projectVersion: String by project
 plugins {
     kotlin("jvm")
     `maven-publish`
+    `java-gradle-plugin`
 }
 
 group = projectGroup
@@ -30,7 +31,11 @@ publishing {
     }
 }
 
-dependencies {
-    testImplementation(kotlin("test"))
-    implementation(gradleApi())
+gradlePlugin {
+    plugins {
+        create("defaultsPlugin") {
+            id = "io.craigmiller160.defaults"
+            implementationClass = "io.craigmiller160.gradle.plugins.CraigDefaultsPlugin"
+        }
+    }
 }
