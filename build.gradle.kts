@@ -25,7 +25,7 @@ publishing {
 gradlePlugin {
     plugins {
         create("defaultsPlugin") {
-            id = "io.craigmiller160.defaults"
+            id = "io.craigmiller160.gradle.defaults"
             implementationClass = "io.craigmiller160.gradle.plugins.CraigDefaultsPlugin"
         }
     }
