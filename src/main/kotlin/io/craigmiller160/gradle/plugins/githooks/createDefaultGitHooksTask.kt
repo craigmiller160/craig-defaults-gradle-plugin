@@ -5,11 +5,29 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
+private val PRE_COMMIT = """
+#!/bin/sh
+
+echo "Running spotless check..."
+
+files=${'$'}(git diff --name-only --staged)
+
+./gradlew spotlessApply
+status=${'$'}?
+
+if [ ${'$'}status -ne 0 ]; then
+  exit 1
+fi
+
+for file in ${'$'}files; do
+  git add ${'$'}file
+done
+
+exit 0
+"""
+
 fun Project.createDefaultGitHooksTask() {
     tasks.register("installDefaultGitHooks") { task ->
-        println("WORKING")
-        println(resources.text.fromArchiveEntry("craig-defaults-gradle-plugin-1.0.0-SNAPSHOT", "githooks/pre-commit").asFile().readText())
-//        resources.text.fromArchiveEntry("")
         task.doLast { taskDoLast ->
             taskDoLast.logger.info("Installing Default Git Hooks")
             val sourcePath = Paths.get(ClassLoader.getSystemClassLoader().getResource("/githooks/pre-commit").toURI())
