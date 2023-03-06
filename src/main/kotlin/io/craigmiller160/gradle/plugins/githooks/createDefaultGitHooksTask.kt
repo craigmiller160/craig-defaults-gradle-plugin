@@ -4,6 +4,7 @@ import org.gradle.api.Project
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import java.nio.file.attribute.PosixFilePermission
 
 private val PRE_COMMIT = """
 #!/bin/sh
@@ -30,9 +31,17 @@ fun Project.createDefaultGitHooksTask() {
     tasks.register("installDefaultGitHooks") { task ->
         task.doLast { taskDoLast ->
             taskDoLast.logger.info("Installing Default Git Hooks")
-            val sourcePath = Paths.get(ClassLoader.getSystemClassLoader().getResource("/githooks/pre-commit").toURI())
             val targetPath = Paths.get(System.getProperty("user.dir"), ".git", "hooks", "pre-commit")
-            Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES)
+            Files.write(targetPath, PRE_COMMIT.toByteArray())
+            Files.setPosixFilePermissions(targetPath, setOf(
+                PosixFilePermission.OWNER_READ,
+                PosixFilePermission.OWNER_WRITE,
+                PosixFilePermission.OWNER_EXECUTE,
+                PosixFilePermission.GROUP_READ,
+                PosixFilePermission.GROUP_EXECUTE,
+                PosixFilePermission.OTHERS_READ,
+                PosixFilePermission.OTHERS_EXECUTE
+            ))
         }
     }
 }
