@@ -16,6 +16,17 @@ fun Project.setupPublishing() {
                     pub.from(components.getByName("kotlin"))
                 }
             }
+
+            publishing.repositories { repoHandler ->
+                repoHandler.maven { mavenRepo ->
+                    val repo = if (project.version.toString().endsWith("-SNAPSHOT")) "maven-snapshots" else "maven-releases"
+                    mavenRepo.url = uri("https://nexus-craigmiller160.ddns.net/repository/$repo")
+                    mavenRepo.credentials { creds ->
+                        creds.username = System.getenv("NEXUS_USER")
+                        creds.password = System.getenv("NEXUS_PASSWORD")
+                    }
+                }
+            }
         }
     }
 }
