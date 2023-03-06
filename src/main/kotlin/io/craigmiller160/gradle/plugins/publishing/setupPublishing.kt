@@ -9,9 +9,9 @@ fun Project.setupPublishing() {
         extensions.configure<PublishingExtension>("publishing") { publishing ->
             publishing.publications { publication ->
                 publication.create("maven", MavenPublication::class.java) { pub ->
-                    pub.groupId = project.group.toString()
-                    pub.artifactId = rootProject.name
-                    pub.version = project.version.toString()
+                    pub.groupId = this@setupPublishing.group.toString()
+                    pub.artifactId = this@setupPublishing.rootProject.name
+                    pub.version = this@setupPublishing.version.toString()
 
                     pub.from(components.getByName("kotlin"))
                 }
