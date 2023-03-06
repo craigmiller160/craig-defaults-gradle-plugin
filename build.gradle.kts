@@ -10,15 +10,6 @@ plugins {
 group = projectGroup
 version = projectVersion
 publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = project.group.toString()
-            artifactId = rootProject.name
-            version = project.version.toString()
-
-            from(components["kotlin"])
-        }
-    }
     repositories {
         maven {
             val repo = if (project.version.toString().endsWith("-SNAPSHOT")) "maven-snapshots" else "maven-releases"
