@@ -42,13 +42,15 @@ private fun writePreCommitFile() {
     ))
 }
 
-fun Project.createDefaultGitHooksTask() {
-    val guardFile = Paths.get(".git", "hooks", GUARD_FILE)
-    if (Files.exists(guardFile)) {
-        logger.debug("Default git hooks already exist, skipping creating")
-    } else {
-        logger.info("Installing default Git hooks")
-        writePreCommitFile()
-        Files.createFile(guardFile)
+fun Project.createSpotlessGitHook() {
+    pluginManager.withPlugin("com.diffplug.spotless") {
+        val guardFile = Paths.get(".git", "hooks", GUARD_FILE)
+        if (Files.exists(guardFile)) {
+            logger.debug("Default git hooks already exist, skipping creating")
+        } else {
+            logger.info("Installing default Git hooks")
+            writePreCommitFile()
+            Files.createFile(guardFile)
+        }
     }
 }
