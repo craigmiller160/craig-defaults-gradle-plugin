@@ -9,7 +9,7 @@ fun Project.fixJarForSpring() {
             ?.let {
                 project.tasks.getByName("jar") {
                     val task = it as Jar
-                    task.archiveClassifier.set("foo")
+                    task.archiveClassifier.set("")
                 }
             }
     }
