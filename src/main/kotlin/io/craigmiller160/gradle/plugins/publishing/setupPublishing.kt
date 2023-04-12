@@ -33,6 +33,13 @@ fun Project.setupPublishing() {
                     }
                 }
             }
+
+            project.tasks.getByName("generateMetadataFileForMavenPublication") { metadataForPublicationTask ->
+                project.tasks.findByName("bootJar")
+                    ?.let {
+                        metadataForPublicationTask.dependsOn("bootJar")
+                    }
+            }
         }
     }
 }
