@@ -5,7 +5,7 @@ import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 
 fun Project.setupPublishing() {
-    afterEvaluate {
+    afterEvaluate { project ->
         pluginManager.withPlugin("maven-publish") {
             extensions.configure<PublishingExtension>("publishing") { publishing ->
                 val groupId = this@setupPublishing.group.toString()
