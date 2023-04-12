@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val projectGroup: String by project
 val projectVersion: String by project
 
@@ -9,6 +11,7 @@ plugins {
 
 group = projectGroup
 version = projectVersion
+java.sourceCompatibility = JavaVersion.VERSION_19
 publishing {
     repositories {
         maven {
@@ -19,6 +22,12 @@ publishing {
                 password = System.getenv("NEXUS_PASSWORD")
             }
         }
+    }
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "19"
     }
 }
 
