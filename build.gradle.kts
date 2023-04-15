@@ -7,6 +7,7 @@ plugins {
     kotlin("jvm")
     `maven-publish`
     `java-gradle-plugin`
+    id("com.diffplug.spotless") version "6.17.0"
 }
 
 group = projectGroup
@@ -37,5 +38,11 @@ gradlePlugin {
             id = "io.craigmiller160.gradle.defaults"
             implementationClass = "io.craigmiller160.gradle.plugins.CraigDefaultsPlugin"
         }
+    }
+}
+
+spotless {
+    kotlin {
+        ktfmt()
     }
 }

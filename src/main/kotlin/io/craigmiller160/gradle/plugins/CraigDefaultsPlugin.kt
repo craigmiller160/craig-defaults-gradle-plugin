@@ -7,9 +7,9 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class CraigDefaultsPlugin : Plugin<Project> {
-    override fun apply(project: Project) {
-        project.createSpotlessGitHook()
-        project.setupPublishing()
-        project.fixJarForSpring()
-    }
+  override fun apply(project: Project) {
+    project.createSpotlessGitHook()
+    project.setupPublishing()
+    project.fixJarForSpring()
+  }
 }
