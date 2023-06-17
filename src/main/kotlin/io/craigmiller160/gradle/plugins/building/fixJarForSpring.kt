@@ -5,10 +5,12 @@ import org.gradle.jvm.tasks.Jar
 
 fun Project.fixJarForSpring() {
   afterEvaluate { project ->
-    project.tasks.findByName("bootJar")?.let {
-      project.tasks.getByName("jar") {
-        val task = it as Jar
-        task.archiveClassifier.set("")
+    project.tasks.findByName("bootJar")?.let { rawBootJarTask ->
+      val bootJarTask = rawBootJarTask as Jar;
+
+      project.tasks.getByName("jar") { rawJarTask ->
+        val jarTask = rawJarTask as Jar
+        jarTask.archiveClassifier.set("")
       }
     }
   }
