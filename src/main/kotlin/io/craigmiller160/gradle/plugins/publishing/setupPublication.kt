@@ -17,6 +17,7 @@ fun Project.setupPublication() {
         pub.version = version
 
         pub.from(components.getByName("kotlin"))
+        pub.artifact(tasks.named("bootJar"))
       }
     }
 
