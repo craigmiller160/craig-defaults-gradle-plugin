@@ -4,8 +4,10 @@ import org.gradle.api.Project
 
 fun Project.fixJarForSpring() {
   afterEvaluate { project ->
-    project.tasks.findByName("bootJar")?.let {
-      project.tasks.getByName("jar") { rawJarTask -> rawJarTask.enabled = false }
+    project.tasks.findByName("bootJar")?.let { rawBootJarTask ->
+      if (rawBootJarTask.enabled) {
+        project.tasks.getByName("jar") { rawJarTask -> rawJarTask.enabled = false }
+      }
     }
   }
 }

@@ -4,6 +4,11 @@ import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 
+private fun Project.isSpringBootApp(): Boolean {
+  val bootJarTask = project.tasks.findByName("bootJar")
+  return bootJarTask != null && bootJarTask.enabled
+}
+
 fun Project.setupPublication() {
   extensions.configure<PublishingExtension>("publishing") { publishing ->
     val groupId = this@setupPublication.group.toString()
@@ -16,7 +21,11 @@ fun Project.setupPublication() {
         pub.artifactId = artifactId
         pub.version = version
 
-        pub.from(components.getByName("kotlin"))
+        if (isSpringBootApp()) {
+          pub.artifact(tasks.named("bootJar"))
+        } else {
+          pub.from(components.getByName("kotlin"))
+        }
       }
     }
 
