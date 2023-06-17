@@ -16,8 +16,11 @@ fun Project.setupPublication() {
         pub.artifactId = artifactId
         pub.version = version
 
-        pub.from(components.getByName("kotlin"))
-        pub.artifact(tasks.named("bootJar"))
+        project.tasks.findByName("bootJar")?.let {
+          pub.artifact(tasks.named("bootJar"))
+        } ?: run {
+          pub.from(components.getByName("kotlin"))
+        }
       }
     }
 
