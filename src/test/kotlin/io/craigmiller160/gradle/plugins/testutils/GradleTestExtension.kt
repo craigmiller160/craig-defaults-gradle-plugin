@@ -5,6 +5,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.Properties
+import kotlin.io.path.createDirectories
+import kotlin.io.path.createFile
 import kotlin.io.path.inputStream
 import org.apache.commons.io.FileUtils
 import org.gradle.testkit.runner.GradleRunner
@@ -16,8 +18,6 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
-import kotlin.io.path.createDirectories
-import kotlin.io.path.createFile
 
 class GradleTestExtension :
     BeforeEachCallback, AfterEachCallback, ParameterResolver, BeforeAllCallback, AfterAllCallback {
@@ -31,15 +31,9 @@ class GradleTestExtension :
   private val tempDirRoot = Files.createTempDirectory("tempRoot")
 
   override fun beforeEach(context: ExtensionContext) {
-    val workingDir = tempDirRoot.resolve("workingDir").apply {
-        createDirectories()
-    }
-      workingDir.resolve(Paths.get(".git", "hooks")).apply {
-          createDirectories()
-      }
-    val testKitDir = workingDir.resolve("testKit").apply {
-        createDirectories()
-    }
+    val workingDir = tempDirRoot.resolve("workingDir").apply { createDirectories() }
+    workingDir.resolve(Paths.get(".git", "hooks")).apply { createDirectories() }
+    val testKitDir = workingDir.resolve("testKit").apply { createDirectories() }
 
     val gradleRunner =
         GradleRunner.create()
@@ -47,9 +41,7 @@ class GradleTestExtension :
             .withProjectDir(workingDir.toFile())
             .withTestKitDir(testKitDir.toFile())
 
-    val buildFile = workingDir.resolve("build.gradle.kts").apply {
-        createFile()
-    }
+    val buildFile = workingDir.resolve("build.gradle.kts").apply { createFile() }
 
     context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
       store.put(WORKING_DIR_KEY, workingDir)
@@ -90,8 +82,7 @@ class GradleTestExtension :
   override fun supportsParameter(
       parameterContext: ParameterContext,
       extensionContext: ExtensionContext
-  ): Boolean =
-      parameterContext.parameter.type == GradleTestContext::class.java
+  ): Boolean = parameterContext.parameter.type == GradleTestContext::class.java
 
   override fun resolveParameter(
       parameterContext: ParameterContext,
@@ -99,16 +90,15 @@ class GradleTestExtension :
   ): Any {
     val store = extensionContext.getStore(Namespace.create(GradleTestExtension::class.java))
     return when (parameterContext.parameter.type) {
-        GradleTestContext::class.java -> {
-            val runner = store.get(GRADLE_RUNNER_KEY) as GradleRunner
-            val buildFile = store.get(BUILD_FILE_KEY) as Path
-            GradleTestContext(
-                runner = store.get(GRADLE_RUNNER_KEY) as GradleRunner,
-                buildFile = store.get(BUILD_FILE_KEY) as Path,
-                pluginVersion = store.get(PLUGIN_VERSION_KEY) as String,
-                workingDir = store.get(WORKING_DIR_KEY) as Path
-            )
-        }
+      GradleTestContext::class.java -> {
+        val runner = store.get(GRADLE_RUNNER_KEY) as GradleRunner
+        val buildFile = store.get(BUILD_FILE_KEY) as Path
+        GradleTestContext(
+            runner = store.get(GRADLE_RUNNER_KEY) as GradleRunner,
+            buildFile = store.get(BUILD_FILE_KEY) as Path,
+            pluginVersion = store.get(PLUGIN_VERSION_KEY) as String,
+            workingDir = store.get(WORKING_DIR_KEY) as Path)
+      }
       else ->
           throw IllegalArgumentException(
               "Invalid parameter type: ${parameterContext.parameter.type}")

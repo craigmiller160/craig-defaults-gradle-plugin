@@ -3,9 +3,6 @@ package io.craigmiller160.gradle.plugins.building
 import io.craigmiller160.gradle.plugins.testutils.GradleTestContext
 import io.craigmiller160.gradle.plugins.testutils.GradleTestExtension
 import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
-import java.nio.file.Files
-import java.nio.file.Path
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.internal.DefaultBuildTask
 import org.junit.jupiter.api.Test
@@ -15,9 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 class FixJarForSpringTest {
 
   @Test
-  fun `runs jar task when spring boot is not present`(
-      context: GradleTestContext
-  ) {
+  fun `runs jar task when spring boot is not present`(context: GradleTestContext) {
     val script =
         """
           plugins {
@@ -61,7 +56,7 @@ class FixJarForSpringTest {
           }
       """
             .trimIndent()
-      context.writeBuildScript(script)
+    context.writeBuildScript(script)
 
     val result = context.runner.withArguments("jar").build()
     result.tasks.shouldHaveExecuted(
@@ -73,9 +68,7 @@ class FixJarForSpringTest {
   }
 
   @Test
-  fun `disables jar task when spring boot is present`(
-      context: GradleTestContext
-  ) {
+  fun `disables jar task when spring boot is present`(context: GradleTestContext) {
     val script =
         """
           plugins {
@@ -90,7 +83,7 @@ class FixJarForSpringTest {
           }
       """
             .trimIndent()
-      context.writeBuildScript(script)
+    context.writeBuildScript(script)
 
     val result = context.runner.withArguments("jar").build()
     result.tasks.shouldHaveExecuted(
