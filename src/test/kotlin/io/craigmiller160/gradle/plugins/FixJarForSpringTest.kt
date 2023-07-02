@@ -92,6 +92,10 @@ class FixJarForSpringTest {
                 id("org.springframework.boot") version "3.0.4"
                 id("io.spring.dependency-management") version "1.1.0"
             }
+            
+            repositories {
+                mavenCentral()
+            }
         """.trimIndent())
 
         val result = gradleRunner.withArguments("jar").build()
