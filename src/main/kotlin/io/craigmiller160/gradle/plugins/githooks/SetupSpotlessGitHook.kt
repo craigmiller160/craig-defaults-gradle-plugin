@@ -1,10 +1,10 @@
 package io.craigmiller160.gradle.plugins.githooks
 
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.attribute.PosixFilePermission
 import org.gradle.api.Project
-import java.io.File
 
 const val PRE_COMMIT =
     """
@@ -31,7 +31,7 @@ exit 0
 private const val GUARD_FILE = "craig-hooks-v1"
 
 private fun writePreCommitFile(projectDir: File) {
-    val targetPath = projectDir.toPath().resolve(Paths.get(".git", "hooks", "pre-commit"))
+  val targetPath = projectDir.toPath().resolve(Paths.get(".git", "hooks", "pre-commit"))
   Files.write(targetPath, PRE_COMMIT.toByteArray())
   Files.setPosixFilePermissions(
       targetPath,
