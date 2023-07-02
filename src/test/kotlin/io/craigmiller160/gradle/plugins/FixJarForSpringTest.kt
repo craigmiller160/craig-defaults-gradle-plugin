@@ -80,6 +80,23 @@ class FixJarForSpringTest {
 
     @Test
     fun `disables jar task when spring boot is present`() {
-        TODO()
+        buildFile.appendText("""
+            import org.springframework.boot.gradle.tasks.bundling.BootJar
+            
+            plugins {
+                kotlin("jvm") version "1.8.20"
+                id("org.springframework.boot") version "3.0.4"
+                id("io.spring.dependency-management") version "1.1.0"
+            }
+        """.trimIndent())
+
+        val result = gradleRunner.withArguments("jar").build()
+        result.tasks.shouldHaveExecuted(
+            DefaultBuildTask(":compileKotlin", TaskOutcome.NO_SOURCE),
+            DefaultBuildTask(":compileJava", TaskOutcome.NO_SOURCE),
+            DefaultBuildTask(":processResources", TaskOutcome.NO_SOURCE),
+            DefaultBuildTask(":classes", TaskOutcome.UP_TO_DATE),
+            DefaultBuildTask(":jar", TaskOutcome.SKIPPED)
+        )
     }
 }
