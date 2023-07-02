@@ -11,46 +11,24 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.io.TempDir
+import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.writeText
 
 @ExtendWith(GradleTestExtension::class)
 class FixJarForSpringTest(
-    private val experimentalGradleRunner: GradleRunner,
+    private val gradleRunner: GradleRunner,
     private val gradleBuildFile: Path
 ) {
-  private lateinit var gradleRunner: GradleRunner
-  private lateinit var buildFile: File
-
-  @BeforeEach
-  fun setup(@TempDir tempDir: File) {
-    val testKitDir = File(tempDir, "testKit")
-    if (!testKitDir.mkdirs()) {
-      throw RuntimeException("Cannot create temporary gradle test kit directory")
-    }
-
-    gradleRunner =
-        GradleRunner.create()
-            .withPluginClasspath()
-            .withProjectDir(tempDir)
-            .withTestKitDir(testKitDir)
-
-    buildFile = File(tempDir, "build.gradle.kts")
-
-    if (!buildFile.createNewFile()) {
-      throw RuntimeException("Cannot create temporary gradle build file")
-    }
-  }
 
   @Test
   fun `runs jar task when spring boot is not present`() {
-    buildFile.appendText(
-        """
-            plugins {
+      Files.write(gradleBuildFile, """
+          plugins {
                 id("io.craigmiller160.gradle.defaults") version "1.3.0-SNAPSHOT"
                 kotlin("jvm") version "1.8.20"
             }
-        """
-            .trimIndent())
+      """.trimIndent().toByteArray())
 
     val result = gradleRunner.withArguments("jar").build()
     result.tasks.shouldHaveExecuted(
@@ -63,6 +41,18 @@ class FixJarForSpringTest(
 
   @Test
   fun `runs jar task when spring boot is present but bootJar is disabled`() {
+      gradleBuildFile.writeText("""
+          plugins {
+            id("io.craigmiller160.gradle.defaults") version "1.3.0-SNAPSHOT"
+            kotlin("jvm") version "1.8.20"
+          }
+      """.trimIndent())
+      Files.write(gradleBuildFile, """
+          plugins {
+                id("io.craigmiller160.gradle.defaults") version "1.3.0-SNAPSHOT"
+                kotlin("jvm") version "1.8.20"
+            }
+      """.trimIndent().toByteArray())
     buildFile.appendText(
         """
             import org.springframework.boot.gradle.tasks.bundling.BootJar
