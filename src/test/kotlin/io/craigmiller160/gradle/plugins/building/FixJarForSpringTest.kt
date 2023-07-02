@@ -1,5 +1,6 @@
 package io.craigmiller160.gradle.plugins.building
 
+import io.craigmiller160.gradle.plugins.testutils.GradleTestExtension
 import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
 import java.io.File
 import java.lang.RuntimeException
@@ -8,8 +9,10 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.internal.DefaultBuildTask
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.io.TempDir
 
+@ExtendWith(GradleTestExtension::class)
 class FixJarForSpringTest {
   private lateinit var gradleRunner: GradleRunner
   private lateinit var buildFile: File

@@ -21,11 +21,11 @@ class GradleTestExtension : BeforeEachCallback, AfterEachCallback {
         val testKitDir = workingDir.resolve("testKit")
             .let { Files.createDirectories(it) }
 
-        val gradleRunner =
-            GradleRunner.create()
-                .withPluginClasspath()
-                .withProjectDir(workingDir.toFile())
-                .withTestKitDir(testKitDir.toFile())
+//        val gradleRunner =
+//            GradleRunner.create()
+//                .withPluginClasspath()
+//                .withProjectDir(workingDir.toFile())
+//                .withTestKitDir(testKitDir.toFile())
 
         val buildFile = workingDir.resolve("build.gradle.kts")
             .let { Files.createFile(it) }
