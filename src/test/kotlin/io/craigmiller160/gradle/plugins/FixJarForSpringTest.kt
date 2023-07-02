@@ -63,6 +63,10 @@ class FixJarForSpringTest {
                 id("io.spring.dependency-management") version "1.1.0"
             }
             
+            repositories {
+                mavenCentral()
+            }
+            
             tasks.withType<BootJar> {
                 enabled = false                   
             }
