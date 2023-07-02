@@ -6,10 +6,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
 import java.lang.RuntimeException
-import java.nio.file.Files
 
 class FixJarForSpringTest {
-    private lateinit var runner: GradleRunner
+    private lateinit var gradleRunner: GradleRunner
     private lateinit var buildFile: File
 
     @BeforeEach
@@ -19,7 +18,7 @@ class FixJarForSpringTest {
             throw RuntimeException("Cannot create temporary gradle test kit directory")
         }
 
-        runner = GradleRunner.create()
+        gradleRunner = GradleRunner.create()
             .withPluginClasspath()
             .withProjectDir(tempDir)
             .withTestKitDir(testKitDir)
