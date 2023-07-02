@@ -3,7 +3,7 @@ package io.craigmiller160.gradle.plugins.githooks
 import io.craigmiller160.gradle.plugins.testutils.GradleTestContext
 import io.craigmiller160.gradle.plugins.testutils.GradleTestExtension
 import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
-import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.paths.shouldExist
 import io.kotest.matchers.paths.shouldNotExist
 import io.kotest.matchers.shouldBe
@@ -63,11 +63,11 @@ class SetupSpotlessGitHookTest {
 
     context.workingDir.resolve(Paths.get(".git", "hooks", GUARD_FILE)).apply { createFile() }
 
-      val result = context.runner.withArguments("init").build()
-      result.tasks.shouldHaveExecuted(DefaultBuildTask(":init", TaskOutcome.SKIPPED))
+    val result = context.runner.withArguments("init").build()
+    result.tasks.shouldHaveExecuted(DefaultBuildTask(":init", TaskOutcome.SKIPPED))
 
-      val preCommitPath = context.workingDir.resolve(Paths.get(".git", "hooks", "pre-commit"))
-      preCommitPath.shouldNotExist()
+    val preCommitPath = context.workingDir.resolve(Paths.get(".git", "hooks", "pre-commit"))
+    preCommitPath.shouldNotExist()
   }
 
   @Test
@@ -100,14 +100,13 @@ class SetupSpotlessGitHookTest {
 
     preCommitPath
         .getPosixFilePermissions()
-        .shouldContain(
-            setOf(
-                PosixFilePermission.OWNER_READ,
-                PosixFilePermission.OWNER_WRITE,
-                PosixFilePermission.OWNER_EXECUTE,
-                PosixFilePermission.GROUP_READ,
-                PosixFilePermission.GROUP_EXECUTE,
-                PosixFilePermission.OTHERS_READ,
-                PosixFilePermission.OTHERS_EXECUTE))
+        .shouldContainAll(
+            PosixFilePermission.OWNER_READ,
+            PosixFilePermission.OWNER_WRITE,
+            PosixFilePermission.OWNER_EXECUTE,
+            PosixFilePermission.GROUP_READ,
+            PosixFilePermission.GROUP_EXECUTE,
+            PosixFilePermission.OTHERS_READ,
+            PosixFilePermission.OTHERS_EXECUTE)
   }
 }
