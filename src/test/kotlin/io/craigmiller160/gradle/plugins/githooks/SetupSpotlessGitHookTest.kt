@@ -5,11 +5,13 @@ import io.craigmiller160.gradle.plugins.testutils.GradleTestExtension
 import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
 import io.kotest.matchers.paths.shouldExist
 import io.kotest.matchers.paths.shouldNotExist
+import io.kotest.matchers.shouldBe
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.internal.DefaultBuildTask
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.nio.file.Paths
+import kotlin.io.path.readText
 
 @ExtendWith(GradleTestExtension::class)
 class SetupSpotlessGitHookTest {
@@ -75,13 +77,12 @@ class SetupSpotlessGitHookTest {
       context.writeBuildScript(script)
 
       val result = context.runner.withArguments("compileKotlin", "-i").build()
-//      result.tasks.shouldHaveExecuted(
-//          DefaultBuildTask(":init", TaskOutcome.SKIPPED)
-//      )
-
-      println(result.output)
+      result.tasks.shouldHaveExecuted(
+          DefaultBuildTask(":init", TaskOutcome.SKIPPED)
+      )
 
       val preCommitPath = context.workingDir.resolve(Paths.get(".git", "hooks", "pre-commit"))
       preCommitPath.shouldExist()
+      preCommitPath.readText().shouldBe(PRE_COMMIT)
   }
 }
