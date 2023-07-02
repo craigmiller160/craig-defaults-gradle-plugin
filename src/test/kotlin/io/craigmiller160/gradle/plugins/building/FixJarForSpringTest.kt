@@ -1,4 +1,4 @@
-package io.craigmiller160.gradle.plugins
+package io.craigmiller160.gradle.plugins.building
 
 import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
 import java.io.File
