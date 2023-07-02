@@ -2,18 +2,13 @@ package io.craigmiller160.gradle.plugins.building
 
 import io.craigmiller160.gradle.plugins.testutils.GradleTestExtension
 import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
-import java.io.File
-import java.lang.RuntimeException
+import java.nio.file.Files
+import java.nio.file.Path
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.internal.DefaultBuildTask
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.io.TempDir
-import java.nio.file.Files
-import java.nio.file.Path
-import kotlin.io.path.writeText
 
 @ExtendWith(GradleTestExtension::class)
 class FixJarForSpringTest(
@@ -23,14 +18,16 @@ class FixJarForSpringTest(
 
   @Test
   fun `runs jar task when spring boot is not present`() {
-      val script = """
+    val script =
+        """
           plugins {
             id("io.craigmiller160.gradle.defaults") version "1.3.0-SNAPSHOT"
             kotlin("jvm") version "1.8.20"
           }
-      """.trimIndent()
+      """
+            .trimIndent()
 
-      Files.write(gradleBuildFile, script.toByteArray())
+    Files.write(gradleBuildFile, script.toByteArray())
 
     val result = gradleRunner.withArguments("jar").build()
     result.tasks.shouldHaveExecuted(
@@ -43,7 +40,8 @@ class FixJarForSpringTest(
 
   @Test
   fun `runs jar task when spring boot is present but bootJar is disabled`() {
-      val script = """
+    val script =
+        """
           import org.springframework.boot.gradle.tasks.bundling.BootJar
           
           plugins {
@@ -60,8 +58,9 @@ class FixJarForSpringTest(
           tasks.withType<BootJar> {
             enabled = false
           }
-      """.trimIndent()
-      Files.write(gradleBuildFile, script.toByteArray())
+      """
+            .trimIndent()
+    Files.write(gradleBuildFile, script.toByteArray())
 
     val result = gradleRunner.withArguments("jar").build()
     result.tasks.shouldHaveExecuted(
@@ -74,7 +73,8 @@ class FixJarForSpringTest(
 
   @Test
   fun `disables jar task when spring boot is present`() {
-      val script = """
+    val script =
+        """
           plugins {
             id("io.craigmiller160.gradle.defaults") version "1.3.0-SNAPSHOT"
             kotlin("jvm") version "1.8.20"
@@ -85,8 +85,9 @@ class FixJarForSpringTest(
           repositories {
             mavenCentral()
           }
-      """.trimIndent()
-      Files.write(gradleBuildFile, script.toByteArray())
+      """
+            .trimIndent()
+    Files.write(gradleBuildFile, script.toByteArray())
 
     val result = gradleRunner.withArguments("jar").build()
     result.tasks.shouldHaveExecuted(
