@@ -37,8 +37,6 @@ class FixJarForSpringTest(
     if (!buildFile.createNewFile()) {
       throw RuntimeException("Cannot create temporary gradle build file")
     }
-
-      println("GRADLE RUNNER: ${gradleRunner.hashCode()}") // TODO delete this
   }
 
   @Test
