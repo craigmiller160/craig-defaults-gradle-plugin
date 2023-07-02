@@ -3,6 +3,9 @@ package io.craigmiller160.gradle.plugins.testutils
 import java.lang.IllegalArgumentException
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
+import java.util.Properties
+import kotlin.io.path.inputStream
 import org.apache.commons.io.FileUtils
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.extension.AfterAllCallback
@@ -13,16 +16,14 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
-import java.nio.file.Paths
-import java.util.Properties
-import kotlin.io.path.inputStream
 
-class GradleTestExtension : BeforeEachCallback, AfterEachCallback, ParameterResolver, BeforeAllCallback, AfterAllCallback {
+class GradleTestExtension :
+    BeforeEachCallback, AfterEachCallback, ParameterResolver, BeforeAllCallback, AfterAllCallback {
   companion object {
     private const val WORKING_DIR_KEY = "WORKING_DIR"
     private const val BUILD_FILE_KEY = "BUILD_FILE"
     private const val GRADLE_RUNNER_KEY = "GRADLE_RUNNER"
-      private const val PLUGIN_VERSION_KEY = "PLUGIN_VERSION"
+    private const val PLUGIN_VERSION_KEY = "PLUGIN_VERSION"
   }
 
   private val tempDirRoot = Files.createTempDirectory("tempRoot")
@@ -60,43 +61,41 @@ class GradleTestExtension : BeforeEachCallback, AfterEachCallback, ParameterReso
     }
   }
 
-    override fun beforeAll(context: ExtensionContext) {
-        val gradleProperties = Paths.get(System.getProperty("user.dir"), "gradle.properties")
-        val properties = Properties().apply {
-            load(gradleProperties.inputStream())
-        }
+  override fun beforeAll(context: ExtensionContext) {
+    val gradleProperties = Paths.get(System.getProperty("user.dir"), "gradle.properties")
+    val properties = Properties().apply { load(gradleProperties.inputStream()) }
 
-        context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
-            store.put(PLUGIN_VERSION_KEY, properties.getProperty("projectVersion"))
-        }
+    context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
+      store.put(PLUGIN_VERSION_KEY, properties.getProperty("projectVersion"))
     }
+  }
 
-    override fun afterAll(context: ExtensionContext) {
-        context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
-            store.remove(PLUGIN_VERSION_KEY)
-        }
+  override fun afterAll(context: ExtensionContext) {
+    context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
+      store.remove(PLUGIN_VERSION_KEY)
     }
+  }
 
-    override fun supportsParameter(
-        parameterContext: ParameterContext,
-        extensionContext: ExtensionContext
-    ): Boolean =
-        parameterContext.parameter.type == GradleRunner::class.java ||
-                parameterContext.parameter.type == Path::class.java ||
-                parameterContext.parameter.type == PluginVersion::class.java
+  override fun supportsParameter(
+      parameterContext: ParameterContext,
+      extensionContext: ExtensionContext
+  ): Boolean =
+      parameterContext.parameter.type == GradleRunner::class.java ||
+          parameterContext.parameter.type == Path::class.java ||
+          parameterContext.parameter.type == PluginVersion::class.java
 
-    override fun resolveParameter(
-        parameterContext: ParameterContext,
-        extensionContext: ExtensionContext
-    ): Any {
-        val store = extensionContext.getStore(Namespace.create(GradleTestExtension::class.java))
-        return when (parameterContext.parameter.type) {
-            GradleRunner::class.java -> store.get(GRADLE_RUNNER_KEY) as GradleRunner
-            Path::class.java -> store.get(BUILD_FILE_KEY) as Path
-            PluginVersion::class.java -> store.get(PLUGIN_VERSION_KEY) as PluginVersion
-            else ->
-                throw IllegalArgumentException(
-                    "Invalid parameter type: ${parameterContext.parameter.type}")
-        }
+  override fun resolveParameter(
+      parameterContext: ParameterContext,
+      extensionContext: ExtensionContext
+  ): Any {
+    val store = extensionContext.getStore(Namespace.create(GradleTestExtension::class.java))
+    return when (parameterContext.parameter.type) {
+      GradleRunner::class.java -> store.get(GRADLE_RUNNER_KEY) as GradleRunner
+      Path::class.java -> store.get(BUILD_FILE_KEY) as Path
+      PluginVersion::class.java -> store.get(PLUGIN_VERSION_KEY) as PluginVersion
+      else ->
+          throw IllegalArgumentException(
+              "Invalid parameter type: ${parameterContext.parameter.type}")
     }
+  }
 }
