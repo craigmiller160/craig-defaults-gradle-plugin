@@ -105,7 +105,8 @@ class GradleTestExtension :
             GradleTestContext(
                 runner = store.get(GRADLE_RUNNER_KEY) as GradleRunner,
                 buildFile = store.get(BUILD_FILE_KEY) as Path,
-                pluginVersion = store.get(PLUGIN_VERSION_KEY) as String
+                pluginVersion = store.get(PLUGIN_VERSION_KEY) as String,
+                workingDir = store.get(WORKING_DIR_KEY) as Path
             )
         }
       else ->
