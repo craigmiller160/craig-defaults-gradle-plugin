@@ -38,6 +38,7 @@ class FixJarForSpringTest {
     fun `runs jar task when spring boot is not present`() {
         buildFile.appendText("""
             plugins {
+                id("io.craigmiller160.gradle.defaults") version "1.3.0-SNAPSHOT"
                 kotlin("jvm") version "1.8.20"
             }
         """.trimIndent())
@@ -58,6 +59,7 @@ class FixJarForSpringTest {
             import org.springframework.boot.gradle.tasks.bundling.BootJar
             
             plugins {
+                id("io.craigmiller160.gradle.defaults") version "1.3.0-SNAPSHOT"
                 kotlin("jvm") version "1.8.20"
                 id("org.springframework.boot") version "3.0.4"
                 id("io.spring.dependency-management") version "1.1.0"
@@ -88,6 +90,7 @@ class FixJarForSpringTest {
             import org.springframework.boot.gradle.tasks.bundling.BootJar
             
             plugins {
+                id("io.craigmiller160.gradle.defaults") version "1.3.0-SNAPSHOT"
                 kotlin("jvm") version "1.8.20"
                 id("org.springframework.boot") version "3.0.4"
                 id("io.spring.dependency-management") version "1.1.0"
