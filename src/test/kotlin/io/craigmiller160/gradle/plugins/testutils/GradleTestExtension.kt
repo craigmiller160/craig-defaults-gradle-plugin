@@ -66,7 +66,7 @@ class GradleTestExtension :
     val properties = Properties().apply { load(gradleProperties.inputStream()) }
 
     context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
-      store.put(PLUGIN_VERSION_KEY, properties.getProperty("projectVersion"))
+      store.put(PLUGIN_VERSION_KEY, PluginVersion(properties.getProperty("projectVersion")))
     }
   }
 
