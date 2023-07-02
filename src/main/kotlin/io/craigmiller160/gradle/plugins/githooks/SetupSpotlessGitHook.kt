@@ -5,7 +5,7 @@ import java.nio.file.Paths
 import java.nio.file.attribute.PosixFilePermission
 import org.gradle.api.Project
 
-private const val PRE_COMMIT =
+const val PRE_COMMIT =
     """
 #!/bin/sh
 
