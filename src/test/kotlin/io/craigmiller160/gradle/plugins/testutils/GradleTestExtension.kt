@@ -6,10 +6,12 @@ import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace
+import org.junit.jupiter.api.extension.ParameterContext
+import org.junit.jupiter.api.extension.ParameterResolver
 import java.nio.file.Files
 import java.nio.file.Path
 
-class GradleTestExtension : BeforeEachCallback, AfterEachCallback {
+class GradleTestExtension : BeforeEachCallback, AfterEachCallback, ParameterResolver {
     companion object {
         private const val WORKING_DIR_KEY = "WORKING_DIR"
     }
@@ -43,5 +45,16 @@ class GradleTestExtension : BeforeEachCallback, AfterEachCallback {
                 store.get(WORKING_DIR_KEY) as Path
             }
         FileUtils.deleteDirectory(workingDir.toFile())
+    }
+
+    override fun supportsParameter(parameterContext: ParameterContext,
+                                   extensionContext: ExtensionContext): Boolean {
+        return parameterContext.parameter.type == GradleRunner::class.java
+    }
+
+    override fun resolveParameter(parameterContext: ParameterContext,
+                                  extensionContext: ExtensionContext): Any {
+        println("RESOLVING")
+        return GradleRunner.create()
     }
 }

@@ -13,7 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.io.TempDir
 
 @ExtendWith(GradleTestExtension::class)
-class FixJarForSpringTest {
+class FixJarForSpringTest(
+    private val experimentalGradleRunner: GradleRunner
+) {
   private lateinit var gradleRunner: GradleRunner
   private lateinit var buildFile: File
 
@@ -35,6 +37,8 @@ class FixJarForSpringTest {
     if (!buildFile.createNewFile()) {
       throw RuntimeException("Cannot create temporary gradle build file")
     }
+
+      println("GRADLE RUNNER: ${gradleRunner.hashCode()}") // TODO delete this
   }
 
   @Test
