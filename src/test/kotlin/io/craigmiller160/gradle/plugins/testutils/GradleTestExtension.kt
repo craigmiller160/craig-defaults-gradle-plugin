@@ -66,7 +66,7 @@ class GradleTestExtension :
     val properties = Properties().apply { load(gradleProperties.inputStream()) }
 
     context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
-      store.put(PLUGIN_VERSION_KEY, PluginVersion(properties.getProperty("projectVersion")))
+      store.put(PLUGIN_VERSION_KEY, properties.getProperty("projectVersion"))
     }
   }
 
@@ -80,9 +80,7 @@ class GradleTestExtension :
       parameterContext: ParameterContext,
       extensionContext: ExtensionContext
   ): Boolean =
-      parameterContext.parameter.type == GradleRunner::class.java ||
-          parameterContext.parameter.type == Path::class.java ||
-          parameterContext.parameter.type == PluginVersion::class.java
+      parameterContext.parameter.type == GradleTestContext::class.java
 
   override fun resolveParameter(
       parameterContext: ParameterContext,
@@ -90,9 +88,15 @@ class GradleTestExtension :
   ): Any {
     val store = extensionContext.getStore(Namespace.create(GradleTestExtension::class.java))
     return when (parameterContext.parameter.type) {
-      GradleRunner::class.java -> store.get(GRADLE_RUNNER_KEY) as GradleRunner
-      Path::class.java -> store.get(BUILD_FILE_KEY) as Path
-      PluginVersion::class.java -> store.get(PLUGIN_VERSION_KEY) as PluginVersion
+        GradleTestContext::class.java -> {
+            val runner = store.get(GRADLE_RUNNER_KEY) as GradleRunner
+            val buildFile = store.get(BUILD_FILE_KEY) as Path
+            GradleTestContext(
+                runner = store.get(GRADLE_RUNNER_KEY) as GradleRunner,
+                buildFile = store.get(BUILD_FILE_KEY) as Path,
+                pluginVersion = store.get(PLUGIN_VERSION_KEY) as String
+            )
+        }
       else ->
           throw IllegalArgumentException(
               "Invalid parameter type: ${parameterContext.parameter.type}")
