@@ -1,5 +1,6 @@
 package io.craigmiller160.gradle.plugins
 
+import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
 import io.kotest.matchers.collections.shouldContainInOrder
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -42,7 +43,7 @@ class FixJarForSpringTest {
         """.trimIndent())
 
         val result = gradleRunner.withArguments("jar").build()
-        result.tasks.shouldContainInOrder(
+        result.tasks.shouldHaveExecuted(
             DefaultBuildTask(":compileKotlin", TaskOutcome.NO_SOURCE),
             DefaultBuildTask(":compileJava", TaskOutcome.NO_SOURCE),
             DefaultBuildTask(":processResources", TaskOutcome.NO_SOURCE),
