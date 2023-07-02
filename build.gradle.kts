@@ -32,6 +32,10 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 gradlePlugin {
     plugins {
         create("defaultsPlugin") {
