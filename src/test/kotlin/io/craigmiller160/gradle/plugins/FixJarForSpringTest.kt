@@ -1,10 +1,9 @@
 package io.craigmiller160.gradle.plugins
 
-import io.craigmiller160.gradle.plugins.testutils.TestBuildTask
-import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainInOrder
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.testkit.runner.internal.DefaultBuildTask
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -44,11 +43,11 @@ class FixJarForSpringTest {
 
         val result = gradleRunner.withArguments("jar").build()
         result.tasks.shouldContainInOrder(
-            TestBuildTask("compileKotlin", TaskOutcome.NO_SOURCE),
-            TestBuildTask("compileJava", TaskOutcome.NO_SOURCE),
-            TestBuildTask("processResources", TaskOutcome.NO_SOURCE),
-            TestBuildTask("classes", TaskOutcome.UP_TO_DATE),
-            TestBuildTask("jar", TaskOutcome.SUCCESS)
+            DefaultBuildTask(":compileKotlin", TaskOutcome.NO_SOURCE),
+            DefaultBuildTask(":compileJava", TaskOutcome.NO_SOURCE),
+            DefaultBuildTask(":processResources", TaskOutcome.NO_SOURCE),
+            DefaultBuildTask(":classes", TaskOutcome.UP_TO_DATE),
+            DefaultBuildTask(":jar", TaskOutcome.SUCCESS)
         )
     }
 
