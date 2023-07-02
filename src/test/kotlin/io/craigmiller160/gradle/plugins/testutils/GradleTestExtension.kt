@@ -16,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
+import kotlin.io.path.createDirectories
+import kotlin.io.path.createFile
 
 class GradleTestExtension :
     BeforeEachCallback, AfterEachCallback, ParameterResolver, BeforeAllCallback, AfterAllCallback {
@@ -29,8 +31,15 @@ class GradleTestExtension :
   private val tempDirRoot = Files.createTempDirectory("tempRoot")
 
   override fun beforeEach(context: ExtensionContext) {
-    val workingDir = tempDirRoot.resolve("workingDir").let { Files.createDirectories(it) }
-    val testKitDir = workingDir.resolve("testKit").let { Files.createDirectories(it) }
+    val workingDir = tempDirRoot.resolve("workingDir").apply {
+        createDirectories()
+    }
+      workingDir.resolve(Paths.get(".git", "hooks")).apply {
+          createDirectories()
+      }
+    val testKitDir = workingDir.resolve("testKit").apply {
+        createDirectories()
+    }
 
     val gradleRunner =
         GradleRunner.create()
@@ -38,7 +47,9 @@ class GradleTestExtension :
             .withProjectDir(workingDir.toFile())
             .withTestKitDir(testKitDir.toFile())
 
-    val buildFile = workingDir.resolve("build.gradle.kts").let { Files.createFile(it) }
+    val buildFile = workingDir.resolve("build.gradle.kts").apply {
+        createFile()
+    }
 
     context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
       store.put(WORKING_DIR_KEY, workingDir)
