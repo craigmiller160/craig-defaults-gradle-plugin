@@ -1,7 +1,6 @@
 package io.craigmiller160.gradle.plugins
 
 import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
-import io.kotest.matchers.collections.shouldContainInOrder
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.internal.DefaultBuildTask
