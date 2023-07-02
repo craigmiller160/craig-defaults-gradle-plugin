@@ -67,7 +67,15 @@ class FixJarForSpringTest {
                 enabled = false                   
             }
         """.trimIndent())
-        TODO()
+
+        val result = gradleRunner.withArguments("jar").build()
+        result.tasks.shouldHaveExecuted(
+            DefaultBuildTask(":compileKotlin", TaskOutcome.NO_SOURCE),
+            DefaultBuildTask(":compileJava", TaskOutcome.NO_SOURCE),
+            DefaultBuildTask(":processResources", TaskOutcome.NO_SOURCE),
+            DefaultBuildTask(":classes", TaskOutcome.UP_TO_DATE),
+            DefaultBuildTask(":jar", TaskOutcome.SUCCESS)
+        )
     }
 
     @Test
