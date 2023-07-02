@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(GradleTestExtension::class)
-class FixJarForSpringTest(
-    private val gradleRunner: GradleRunner,
-    private val gradleBuildFile: Path
-) {
+class FixJarForSpringTest {
 
   @Test
-  fun `runs jar task when spring boot is not present`() {
+  fun `runs jar task when spring boot is not present`(
+      gradleRunner: GradleRunner,
+      gradleBuildFile: Path
+  ) {
     val script =
         """
           plugins {
@@ -39,22 +39,25 @@ class FixJarForSpringTest(
   }
 
   @Test
-  fun `runs jar task when spring boot is present but bootJar is disabled`() {
+  fun `runs jar task when spring boot is present but bootJar is disabled`(
+      gradleRunner: GradleRunner,
+      gradleBuildFile: Path
+  ) {
     val script =
         """
           import org.springframework.boot.gradle.tasks.bundling.BootJar
-          
+
           plugins {
             id("io.craigmiller160.gradle.defaults") version "1.3.0-SNAPSHOT"
             kotlin("jvm") version "1.8.20"
             id("org.springframework.boot") version "3.0.4"
             id("io.spring.dependency-management") version "1.1.0"
           }
-          
+
           repositories {
             mavenCentral()
           }
-          
+
           tasks.withType<BootJar> {
             enabled = false
           }
@@ -72,7 +75,10 @@ class FixJarForSpringTest(
   }
 
   @Test
-  fun `disables jar task when spring boot is present`() {
+  fun `disables jar task when spring boot is present`(
+      gradleRunner: GradleRunner,
+      gradleBuildFile: Path
+  ) {
     val script =
         """
           plugins {
@@ -81,7 +87,7 @@ class FixJarForSpringTest(
             id("org.springframework.boot") version "3.0.4"
             id("io.spring.dependency-management") version "1.1.0"
           }
-          
+
           repositories {
             mavenCentral()
           }
