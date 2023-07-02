@@ -7,6 +7,7 @@ fun Project.setupPublishing() {
     pluginManager.withPlugin("maven-publish") {
       project.setupPublication()
       project.fixMavenDependencyManagement()
+      project.fixPublishOrder()
     }
   }
 }
