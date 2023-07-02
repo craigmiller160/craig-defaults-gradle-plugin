@@ -1,5 +1,6 @@
 package io.craigmiller160.gradle.plugins.testutils
 
+import org.apache.commons.io.FileUtils
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
@@ -41,6 +42,6 @@ class GradleTestExtension : BeforeEachCallback, AfterEachCallback {
             .let { store ->
                 store.get(WORKING_DIR_KEY) as Path
             }
-        Files.delete(workingDir)
+        FileUtils.deleteDirectory(workingDir.toFile())
     }
 }

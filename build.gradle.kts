@@ -58,4 +58,5 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
+    testImplementation("commons-io:commons-io:2.13.0")
 }
