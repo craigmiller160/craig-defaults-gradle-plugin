@@ -30,9 +30,14 @@ class FixJarForSpringTest {
             throw RuntimeException("Cannot create temporary gradle build file")
         }
     }
+
     @Test
-    fun experiment() {
-        val result = runner.withArguments("tasks").build()
-        println(result.output)
+    fun `runs jar task when spring boot is not present`() {
+        TODO()
+    }
+
+    @Test
+    fun `disables jar task when spring boot is present`() {
+        TODO()
     }
 }
