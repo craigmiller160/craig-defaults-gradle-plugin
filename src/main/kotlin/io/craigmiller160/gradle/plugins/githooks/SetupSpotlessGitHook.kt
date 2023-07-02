@@ -28,7 +28,7 @@ done
 exit 0
 """
 
-private const val GUARD_FILE = "craig-hooks-v1"
+const val GUARD_FILE = "craig-hooks-v1"
 
 private fun writePreCommitFile(projectDir: File) {
   val targetPath = projectDir.toPath().resolve(Paths.get(".git", "hooks", "pre-commit"))
