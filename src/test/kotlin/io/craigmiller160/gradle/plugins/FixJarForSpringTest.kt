@@ -54,6 +54,19 @@ class FixJarForSpringTest {
 
     @Test
     fun `runs jar task when spring boot is present but bootJar is disabled`() {
+        buildFile.appendText("""
+            import org.springframework.boot.gradle.tasks.bundling.BootJar
+            
+            plugins {
+                kotlin("jvm") version "1.8.20"
+                id("org.springframework.boot") version "3.0.4"
+                id("io.spring.dependency-management") version "1.1.0"
+            }
+            
+            tasks.withType<BootJar> {
+                enabled = false                   
+            }
+        """.trimIndent())
         TODO()
     }
 

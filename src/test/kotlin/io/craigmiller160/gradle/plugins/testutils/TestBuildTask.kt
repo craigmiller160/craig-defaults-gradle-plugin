@@ -4,9 +4,9 @@ import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.TaskOutcome
 
 data class TestBuildTask(
-    val path: String,
-    val outcome: TaskOutcome
+    val taskPath: String,
+    val taskOutcome: TaskOutcome
 ) : BuildTask {
-    override fun getPath(): String = path
-    override fun getOutcome(): TaskOutcome = outcome
+    override fun getPath(): String = taskPath
+    override fun getOutcome(): TaskOutcome = taskOutcome
 }
