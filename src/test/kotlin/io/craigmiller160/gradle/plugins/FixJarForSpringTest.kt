@@ -36,6 +36,11 @@ class FixJarForSpringTest {
     }
 
     @Test
+    fun `runs jar task when spring boot is present but bootJar is disabled`() {
+        TODO()
+    }
+
+    @Test
     fun `disables jar task when spring boot is present`() {
         TODO()
     }
