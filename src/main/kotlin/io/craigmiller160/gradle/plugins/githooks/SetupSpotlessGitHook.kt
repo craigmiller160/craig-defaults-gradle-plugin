@@ -4,6 +4,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.attribute.PosixFilePermission
 import org.gradle.api.Project
+import java.io.File
 
 const val PRE_COMMIT =
     """
@@ -29,8 +30,8 @@ exit 0
 
 private const val GUARD_FILE = "craig-hooks-v1"
 
-private fun writePreCommitFile() {
-  val targetPath = Paths.get(System.getProperty("user.dir"), ".git", "hooks", "pre-commit")
+private fun writePreCommitFile(projectDir: File) {
+    val targetPath = projectDir.toPath().resolve(Paths.get(".git", "hooks", "pre-commit"))
   Files.write(targetPath, PRE_COMMIT.toByteArray())
   Files.setPosixFilePermissions(
       targetPath,
@@ -46,12 +47,12 @@ private fun writePreCommitFile() {
 
 fun Project.createSpotlessGitHook() {
   pluginManager.withPlugin("com.diffplug.spotless") {
-    val guardFile = Paths.get(".git", "hooks", GUARD_FILE)
+    val guardFile = projectDir.toPath().resolve(Paths.get(".git", "hooks", GUARD_FILE))
     if (Files.exists(guardFile)) {
       logger.debug("Default git hooks already exist, skipping creating")
     } else {
       logger.info("Installing default Git hooks")
-      writePreCommitFile()
+      writePreCommitFile(projectDir)
       Files.createFile(guardFile)
     }
   }
