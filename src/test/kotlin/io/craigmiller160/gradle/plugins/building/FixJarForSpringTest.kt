@@ -11,10 +11,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.io.TempDir
+import java.nio.file.Path
 
 @ExtendWith(GradleTestExtension::class)
 class FixJarForSpringTest(
-    private val experimentalGradleRunner: GradleRunner
+    private val experimentalGradleRunner: GradleRunner,
+    private val gradleBuildFile: Path
 ) {
   private lateinit var gradleRunner: GradleRunner
   private lateinit var buildFile: File
