@@ -10,6 +10,7 @@ import java.nio.file.Files
 
 class FixJarForSpringTest {
     private lateinit var runner: GradleRunner
+    private lateinit var buildFile: File
 
     @BeforeEach
     fun setup(@TempDir tempDir: File) {
@@ -17,7 +18,9 @@ class FixJarForSpringTest {
             .withPluginClasspath()
             .withProjectDir(tempDir)
 
-        if (!File(tempDir, "build.gradle.kts").createNewFile()) {
+        buildFile = File(tempDir, "build.gradle.kts")
+
+        if (!buildFile.createNewFile()) {
             throw RuntimeException("Cannot create temporary gradle build file")
         }
     }
