@@ -53,6 +53,9 @@ spotless {
 
 dependencies {
     val junitVersion: String by project
+    val kotestVersion: String by project
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
 }

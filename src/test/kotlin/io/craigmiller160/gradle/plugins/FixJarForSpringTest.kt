@@ -32,7 +32,14 @@ class FixJarForSpringTest {
 
     @Test
     fun `runs jar task when spring boot is not present`() {
-        TODO()
+        buildFile.appendText("""
+            plugins {
+                kotlin("jvm") version "1.8.20"
+            }
+        """.trimIndent())
+
+        val result = gradleRunner.withArguments("jar").build()
+        result.tasks.forEach { task -> println("TASK: ${task.path} ${task.outcome}") }
     }
 
     @Test
