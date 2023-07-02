@@ -24,7 +24,7 @@ class SetupSpotlessGitHookTest {
 
     val result = context.runner.withArguments("init").build()
     result.tasks.shouldHaveExecuted(
-      DefaultBuildTask(":init", TaskOutcome.SUCCESS)
+      DefaultBuildTask(":init", TaskOutcome.SKIPPED)
     )
 
     val preCommitPath = context.workingDir.resolve(Paths.get(".git", "hooks", "pre-commit"))
