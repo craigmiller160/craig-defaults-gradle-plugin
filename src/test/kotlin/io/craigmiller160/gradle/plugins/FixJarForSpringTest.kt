@@ -14,9 +14,15 @@ class FixJarForSpringTest {
 
     @BeforeEach
     fun setup(@TempDir tempDir: File) {
+        val testKitDir = File(tempDir, "testKit")
+        if (!testKitDir.mkdirs()) {
+            throw RuntimeException("Cannot create temporary gradle test kit directory")
+        }
+
         runner = GradleRunner.create()
             .withPluginClasspath()
             .withProjectDir(tempDir)
+            .withTestKitDir(testKitDir)
 
         buildFile = File(tempDir, "build.gradle.kts")
 
