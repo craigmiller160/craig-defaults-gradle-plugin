@@ -1,60 +1,63 @@
 package io.craigmiller160.gradle.plugins
 
 import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
+import java.io.File
+import java.lang.RuntimeException
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.internal.DefaultBuildTask
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
-import java.io.File
-import java.lang.RuntimeException
 
 class FixJarForSpringTest {
-    private lateinit var gradleRunner: GradleRunner
-    private lateinit var buildFile: File
+  private lateinit var gradleRunner: GradleRunner
+  private lateinit var buildFile: File
 
-    @BeforeEach
-    fun setup(@TempDir tempDir: File) {
-        val testKitDir = File(tempDir, "testKit")
-        if (!testKitDir.mkdirs()) {
-            throw RuntimeException("Cannot create temporary gradle test kit directory")
-        }
+  @BeforeEach
+  fun setup(@TempDir tempDir: File) {
+    val testKitDir = File(tempDir, "testKit")
+    if (!testKitDir.mkdirs()) {
+      throw RuntimeException("Cannot create temporary gradle test kit directory")
+    }
 
-        gradleRunner = GradleRunner.create()
+    gradleRunner =
+        GradleRunner.create()
             .withPluginClasspath()
             .withProjectDir(tempDir)
             .withTestKitDir(testKitDir)
 
-        buildFile = File(tempDir, "build.gradle.kts")
+    buildFile = File(tempDir, "build.gradle.kts")
 
-        if (!buildFile.createNewFile()) {
-            throw RuntimeException("Cannot create temporary gradle build file")
-        }
+    if (!buildFile.createNewFile()) {
+      throw RuntimeException("Cannot create temporary gradle build file")
     }
+  }
 
-    @Test
-    fun `runs jar task when spring boot is not present`() {
-        buildFile.appendText("""
+  @Test
+  fun `runs jar task when spring boot is not present`() {
+    buildFile.appendText(
+        """
             plugins {
                 id("io.craigmiller160.gradle.defaults") version "1.3.0-SNAPSHOT"
                 kotlin("jvm") version "1.8.20"
             }
-        """.trimIndent())
+        """
+            .trimIndent())
 
-        val result = gradleRunner.withArguments("jar").build()
-        result.tasks.shouldHaveExecuted(
-            DefaultBuildTask(":compileKotlin", TaskOutcome.NO_SOURCE),
-            DefaultBuildTask(":compileJava", TaskOutcome.NO_SOURCE),
-            DefaultBuildTask(":processResources", TaskOutcome.NO_SOURCE),
-            DefaultBuildTask(":classes", TaskOutcome.UP_TO_DATE),
-            DefaultBuildTask(":jar", TaskOutcome.SUCCESS)
-        )
-    }
+    val result = gradleRunner.withArguments("jar").build()
+    result.tasks.shouldHaveExecuted(
+        DefaultBuildTask(":compileKotlin", TaskOutcome.NO_SOURCE),
+        DefaultBuildTask(":compileJava", TaskOutcome.NO_SOURCE),
+        DefaultBuildTask(":processResources", TaskOutcome.NO_SOURCE),
+        DefaultBuildTask(":classes", TaskOutcome.UP_TO_DATE),
+        DefaultBuildTask(":jar", TaskOutcome.SUCCESS))
+  }
 
-    @Test
-    fun `runs jar task when spring boot is present but bootJar is disabled`() {
-        buildFile.appendText("""
+  @Test
+  fun `runs jar task when spring boot is present but bootJar is disabled`() {
+    buildFile.appendText(
+        """
             import org.springframework.boot.gradle.tasks.bundling.BootJar
             
             plugins {
@@ -71,21 +74,22 @@ class FixJarForSpringTest {
             tasks.withType<BootJar> {
                 enabled = false                   
             }
-        """.trimIndent())
+        """
+            .trimIndent())
 
-        val result = gradleRunner.withArguments("jar").build()
-        result.tasks.shouldHaveExecuted(
-            DefaultBuildTask(":compileKotlin", TaskOutcome.NO_SOURCE),
-            DefaultBuildTask(":compileJava", TaskOutcome.NO_SOURCE),
-            DefaultBuildTask(":processResources", TaskOutcome.NO_SOURCE),
-            DefaultBuildTask(":classes", TaskOutcome.UP_TO_DATE),
-            DefaultBuildTask(":jar", TaskOutcome.SUCCESS)
-        )
-    }
+    val result = gradleRunner.withArguments("jar").build()
+    result.tasks.shouldHaveExecuted(
+        DefaultBuildTask(":compileKotlin", TaskOutcome.NO_SOURCE),
+        DefaultBuildTask(":compileJava", TaskOutcome.NO_SOURCE),
+        DefaultBuildTask(":processResources", TaskOutcome.NO_SOURCE),
+        DefaultBuildTask(":classes", TaskOutcome.UP_TO_DATE),
+        DefaultBuildTask(":jar", TaskOutcome.SUCCESS))
+  }
 
-    @Test
-    fun `disables jar task when spring boot is present`() {
-        buildFile.appendText("""
+  @Test
+  fun `disables jar task when spring boot is present`() {
+    buildFile.appendText(
+        """
             import org.springframework.boot.gradle.tasks.bundling.BootJar
             
             plugins {
@@ -98,15 +102,15 @@ class FixJarForSpringTest {
             repositories {
                 mavenCentral()
             }
-        """.trimIndent())
+        """
+            .trimIndent())
 
-        val result = gradleRunner.withArguments("jar").build()
-        result.tasks.shouldHaveExecuted(
-            DefaultBuildTask(":compileKotlin", TaskOutcome.NO_SOURCE),
-            DefaultBuildTask(":compileJava", TaskOutcome.NO_SOURCE),
-            DefaultBuildTask(":processResources", TaskOutcome.NO_SOURCE),
-            DefaultBuildTask(":classes", TaskOutcome.UP_TO_DATE),
-            DefaultBuildTask(":jar", TaskOutcome.SKIPPED)
-        )
-    }
+    val result = gradleRunner.withArguments("jar").build()
+    result.tasks.shouldHaveExecuted(
+        DefaultBuildTask(":compileKotlin", TaskOutcome.NO_SOURCE),
+        DefaultBuildTask(":compileJava", TaskOutcome.NO_SOURCE),
+        DefaultBuildTask(":processResources", TaskOutcome.NO_SOURCE),
+        DefaultBuildTask(":classes", TaskOutcome.UP_TO_DATE),
+        DefaultBuildTask(":jar", TaskOutcome.SKIPPED))
+  }
 }
