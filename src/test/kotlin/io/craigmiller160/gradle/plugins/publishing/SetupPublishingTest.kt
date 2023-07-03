@@ -2,6 +2,7 @@ package io.craigmiller160.gradle.plugins.publishing
 
 import io.craigmiller160.gradle.plugins.testutils.GradleTestContext
 import io.craigmiller160.gradle.plugins.testutils.GradleTestExtension
+import io.kotest.matchers.string.shouldContain
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -16,7 +17,19 @@ class SetupPublishingTest {
 
   @Test
   fun `adds publication when maven-publish task is present`(context: GradleTestContext) {
-    TODO()
+    val script =
+      """
+          plugins {
+            id("io.craigmiller160.gradle.defaults") version "${context.pluginVersion}"
+            kotlin("jvm") version "1.8.20"
+            `maven-publish`
+          }
+      """
+        .trimIndent()
+    context.writeBuildScript(script)
+
+      val result = context.runner.withArguments("tasks").build()
+      result.output.shouldContain("publishMavenPublicationToCraigNexusRepository")
   }
 
   @Test
