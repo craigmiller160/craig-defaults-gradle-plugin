@@ -30,6 +30,7 @@ class SetupPublishingTest {
 
       val result = context.runner.withArguments("tasks").build()
       result.output.shouldContain("publishMavenPublicationToCraigNexusRepository")
+      // TODO can I inspect the build file itself
   }
 
   @Test
