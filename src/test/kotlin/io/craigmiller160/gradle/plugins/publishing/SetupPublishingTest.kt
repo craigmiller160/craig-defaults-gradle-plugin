@@ -2,13 +2,14 @@ package io.craigmiller160.gradle.plugins.publishing
 
 import io.craigmiller160.gradle.plugins.testutils.GradleTestContext
 import io.craigmiller160.gradle.plugins.testutils.GradleTestExtension
-import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
-import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.testkit.runner.internal.DefaultBuildTask
+import org.junit.jupiter.api.Assertions.assertTrue
+import java.nio.file.Paths
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import kotlin.io.path.exists
+import kotlin.io.path.readText
 
 @ExtendWith(GradleTestExtension::class)
 class SetupPublishingTest {
@@ -48,9 +49,9 @@ class SetupPublishingTest {
   }
 
   @Test
-  fun `runs publish task and fixes pom_xml`(
-      context: GradleTestContext
-  ) {
+  fun `runs publish task and fixes pom_xml`(context: GradleTestContext) {
+    val group = "io.craigmiller160.test"
+    val version = "1.0.0"
     val script =
         """
           plugins {
@@ -59,20 +60,26 @@ class SetupPublishingTest {
             `maven-publish`
           }
           
-          group = "io.craigmiller160.test"
-          version = "1.0.0"
+          group = "$group"
+          version = "$version"
       """
             .trimIndent()
     context.writeBuildScript(script)
 
     val result = context.runner.withArguments("publishToMavenLocal").build()
-      result.tasks.shouldHaveExecuted(
-          DefaultBuildTask("compileKotlin", TaskOutcome.UP_TO_DATE),
-          DefaultBuildTask("compileJava", TaskOutcome.NO_SOURCE),
-          DefaultBuildTask("processResources", TaskOutcome.SUCCESS)
-      )
-    println(result.output)
+    val pomPath =
+        Paths.get(
+            System.getProperty("user.home"),
+            ".m2",
+            "repository",
+            group,
+            GradleTestExtension.PROJECT_NAME,
+            version,
+            "${GradleTestExtension.PROJECT_NAME}.pom")
+      assertTrue { pomPath.exists() }
+      val xml = pomPath.readText()
+      println("XML: $xml")
 
-      // TODO don't forget about validating the pom.xml fix
+    // TODO don't forget about validating the pom.xml fix
   }
 }

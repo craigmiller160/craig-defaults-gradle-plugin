@@ -23,7 +23,7 @@ import org.junit.jupiter.api.extension.ParameterResolver
 class GradleTestExtension :
     BeforeEachCallback, AfterEachCallback, ParameterResolver, BeforeAllCallback, AfterAllCallback {
   companion object {
-      const val PROJECT_NAME = "gradle-plugin-test-project"
+    const val PROJECT_NAME = "gradle-plugin-test-project"
 
     private const val WORKING_DIR_KEY = "WORKING_DIR"
     private const val BUILD_FILE_KEY = "BUILD_FILE"
