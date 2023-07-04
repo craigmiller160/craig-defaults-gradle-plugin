@@ -42,11 +42,15 @@ class SetupPublishingTest {
 
     val result = context.runner.withArguments("tasks").build()
     result.output.shouldContain("publishMavenPublicationToCraigNexusRepository")
-    // TODO can I inspect the build file itself
   }
 
   @Test
   fun `fixes maven dependency management when generating pom_xml`(context: GradleTestContext) {
     TODO()
   }
+
+    @Test
+    fun `runs publish task after all other tasks have completed`() {
+        TODO()
+    }
 }
