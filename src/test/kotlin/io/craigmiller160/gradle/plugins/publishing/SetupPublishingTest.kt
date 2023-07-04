@@ -2,8 +2,11 @@ package io.craigmiller160.gradle.plugins.publishing
 
 import io.craigmiller160.gradle.plugins.testutils.GradleTestContext
 import io.craigmiller160.gradle.plugins.testutils.GradleTestExtension
+import io.craigmiller160.gradle.plugins.testutils.shouldHaveExecuted
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
+import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.testkit.runner.internal.DefaultBuildTask
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -66,8 +69,14 @@ class SetupPublishingTest {
             .trimIndent()
     context.writeBuildScript(script)
 
-    val result = context.runner.withArguments("publishToMavenLocal").build()
-      result.tasks.forEach { println(it.path) }
+    val result = context.runner.withArguments("build", "publishToMavenLocal").build()
+      result.tasks.shouldHaveExecuted(
+          DefaultBuildTask("compileKotlin", TaskOutcome.UP_TO_DATE),
+          DefaultBuildTask("compileJava", TaskOutcome.NO_SOURCE),
+          DefaultBuildTask("processResources", TaskOutcome.SUCCESS)
+      )
     println(result.output)
+
+      // TODO don't forget about validating the pom.xml fix
   }
 }
