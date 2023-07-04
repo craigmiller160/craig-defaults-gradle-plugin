@@ -23,6 +23,8 @@ import org.junit.jupiter.api.extension.ParameterResolver
 class GradleTestExtension :
     BeforeEachCallback, AfterEachCallback, ParameterResolver, BeforeAllCallback, AfterAllCallback {
   companion object {
+      const val PROJECT_NAME = "gradle-plugin-test-project"
+
     private const val WORKING_DIR_KEY = "WORKING_DIR"
     private const val BUILD_FILE_KEY = "BUILD_FILE"
     private const val SETTINGS_FILE_KEY = "SETTINGS_FILE"
@@ -45,7 +47,7 @@ class GradleTestExtension :
 
     val buildFile = workingDir.resolve("build.gradle.kts").apply { createFile() }
     val settingsFile = workingDir.resolve("settings.gradle.kts").apply { createFile() }
-    settingsFile.writeText("""rootProject.name = "test-project" """)
+    settingsFile.writeText("""rootProject.name = "$PROJECT_NAME" """)
 
     context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
       store.put(WORKING_DIR_KEY, workingDir)

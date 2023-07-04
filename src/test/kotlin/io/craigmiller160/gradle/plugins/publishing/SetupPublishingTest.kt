@@ -58,11 +58,16 @@ class SetupPublishingTest {
           
           group = "io.craigmiller160.test"
           version = "1.0.0"
+          
+          tasks.withType<Test> {
+              useJUnitPlatform()
+          }
       """
             .trimIndent()
     context.writeBuildScript(script)
 
     val result = context.runner.withArguments("publishToMavenLocal").build()
+      result.tasks.forEach { println(it.path) }
     println(result.output)
   }
 }
