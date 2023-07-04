@@ -67,6 +67,10 @@ class SetupPublishingTest {
             id("io.spring.dependency-management") version "1.1.0"
           }
           
+          repositories {
+            mavenCentral()
+          }
+          
           dependencyManagement {
             imports {
               mavenBom("org.springdoc:springdoc-openapi:2.0.3")
