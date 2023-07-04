@@ -91,7 +91,7 @@ class SetupPublishingTest {
             "${GradleTestExtension.PROJECT_NAME}-$version.pom")
     assertTrue { pomPath.exists() }
     val xml = pomPath.readText()
-    println("XML: $xml")
+    println(xml)
 
     val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xml)
     val xPath = XPathFactory.newInstance().newXPath()
