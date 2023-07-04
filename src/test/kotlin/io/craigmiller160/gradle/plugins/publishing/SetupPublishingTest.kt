@@ -44,10 +44,12 @@ class SetupPublishingTest {
     result.output.shouldContain("publishMavenPublicationToCraigNexusRepository")
   }
 
-    @Test
-    fun `runs publish task after all other tasks have completed, and fixes pom_xml`(context: GradleTestContext) {
-        val script =
-            """
+  @Test
+  fun `runs publish task after all other tasks have completed, and fixes pom_xml`(
+      context: GradleTestContext
+  ) {
+    val script =
+        """
           plugins {
             id("io.craigmiller160.gradle.defaults") version "${context.pluginVersion}"
             kotlin("jvm") version "1.8.20"
@@ -57,10 +59,10 @@ class SetupPublishingTest {
           group = "io.craigmiller160.test"
           version = "1.0.0"
       """
-                .trimIndent()
-        context.writeBuildScript(script)
+            .trimIndent()
+    context.writeBuildScript(script)
 
-        val result = context.runner.withArguments("publishToMavenLocal").build()
-        println(result.output)
-    }
+    val result = context.runner.withArguments("publishToMavenLocal").build()
+    println(result.output)
+  }
 }

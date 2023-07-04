@@ -8,6 +8,7 @@ import java.util.Properties
 import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
 import kotlin.io.path.inputStream
+import kotlin.io.path.writeText
 import org.apache.commons.io.FileUtils
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.extension.AfterAllCallback
@@ -24,6 +25,7 @@ class GradleTestExtension :
   companion object {
     private const val WORKING_DIR_KEY = "WORKING_DIR"
     private const val BUILD_FILE_KEY = "BUILD_FILE"
+    private const val SETTINGS_FILE_KEY = "SETTINGS_FILE"
     private const val GRADLE_RUNNER_KEY = "GRADLE_RUNNER"
     private const val PLUGIN_VERSION_KEY = "PLUGIN_VERSION"
   }
@@ -42,10 +44,13 @@ class GradleTestExtension :
             .withTestKitDir(testKitDir.toFile())
 
     val buildFile = workingDir.resolve("build.gradle.kts").apply { createFile() }
+    val settingsFile = workingDir.resolve("settings.gradle.kts").apply { createFile() }
+    settingsFile.writeText("""rootProject.name = "test-project" """)
 
     context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
       store.put(WORKING_DIR_KEY, workingDir)
       store.put(BUILD_FILE_KEY, buildFile)
+      store.put(SETTINGS_FILE_KEY, settingsFile)
       store.put(GRADLE_RUNNER_KEY, gradleRunner)
     }
   }
@@ -60,6 +65,7 @@ class GradleTestExtension :
     context.getStore(Namespace.create(GradleTestExtension::class.java)).let { store ->
       store.remove(WORKING_DIR_KEY)
       store.remove(BUILD_FILE_KEY)
+      store.remove(SETTINGS_FILE_KEY)
       store.remove(GRADLE_RUNNER_KEY)
     }
   }
