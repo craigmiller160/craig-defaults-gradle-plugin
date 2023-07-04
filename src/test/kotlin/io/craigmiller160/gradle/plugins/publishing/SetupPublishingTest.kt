@@ -4,18 +4,17 @@ import io.craigmiller160.gradle.plugins.testutils.GradleTestContext
 import io.craigmiller160.gradle.plugins.testutils.GradleTestExtension
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import java.nio.file.Paths
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.w3c.dom.NodeList
-import javax.xml.XMLConstants
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 import kotlin.io.path.exists
 import kotlin.io.path.readText
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.w3c.dom.NodeList
 
 @ExtendWith(GradleTestExtension::class)
 class SetupPublishingTest {
@@ -82,14 +81,15 @@ class SetupPublishingTest {
             GradleTestExtension.PROJECT_NAME,
             version,
             "${GradleTestExtension.PROJECT_NAME}-$version.pom")
-      assertTrue { pomPath.exists() }
-      val xml = pomPath.readText()
-      println("XML: $xml")
+    assertTrue { pomPath.exists() }
+    val xml = pomPath.readText()
+    println("XML: $xml")
 
-      val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xml)
-      val xPath = XPathFactory.newInstance().newXPath()
-      val nodes = xPath.compile("/project/dependencyManagement")
-          .evaluate(doc, XPathConstants.NODESET) as NodeList
-      assertEquals(1, nodes.length)
+    val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xml)
+    val xPath = XPathFactory.newInstance().newXPath()
+    val nodes =
+        xPath.compile("/project/dependencyManagement").evaluate(doc, XPathConstants.NODESET)
+            as NodeList
+    assertEquals(1, nodes.length)
   }
 }
