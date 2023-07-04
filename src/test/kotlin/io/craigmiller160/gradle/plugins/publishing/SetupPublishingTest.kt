@@ -63,6 +63,14 @@ class SetupPublishingTest {
             id("io.craigmiller160.gradle.defaults") version "${context.pluginVersion}"
             kotlin("jvm") version "1.8.20"
             `maven-publish`
+            id("org.springframework.boot") version "3.0.4"
+            id("io.spring.dependency-management") version "1.1.0"
+          }
+          
+          dependencyManagement {
+            imports {
+              mavenBom("org.springdoc:springdoc-openapi:2.0.3")
+            }
           }
           
           group = "$group"
