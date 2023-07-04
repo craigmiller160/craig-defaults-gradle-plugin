@@ -61,6 +61,8 @@ class SetupPublishingTest {
     val version = "1.0.0"
     val script =
         """
+            import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+            
           plugins {
             id("io.craigmiller160.gradle.defaults") version "${context.pluginVersion}"
             kotlin("jvm") version "1.8.20"
@@ -77,6 +79,13 @@ class SetupPublishingTest {
             imports {
               mavenBom("org.springdoc:springdoc-openapi:2.0.3")
             }
+          }
+          
+          tasks.withType<KotlinCompile> {
+              kotlinOptions {
+                  freeCompilerArgs = listOf("-Xjsr305=strict", "-Xcontext-receivers")
+                  jvmTarget = "19"
+              }
           }
           
           group = "$group"
