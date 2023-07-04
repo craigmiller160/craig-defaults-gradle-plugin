@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.w3c.dom.NodeList
+import kotlin.io.path.createDirectories
+import kotlin.io.path.writeText
 
 @ExtendWith(GradleTestExtension::class)
 class SetupPublishingTest {
@@ -82,6 +84,22 @@ class SetupPublishingTest {
       """
             .trimIndent()
     context.writeBuildScript(script)
+
+      val mainKotlinDir = context.workingDir.resolve(Paths.get("src", "main", "kotlin"))
+          .apply { createDirectories() }
+      mainKotlinDir.resolve("Runner.kt").apply {
+          writeText("""
+              import org.springframework.boot.runApplication
+              import org.springframework.boot.autoconfigure.SpringBootApplication
+              
+              @SpringBootApplication
+              class Runner
+              
+              fun main(args: Array<String>) {
+                runApplication<Runner>(*args)
+              }
+          """.trimIndent())
+      }
 
     val result = context.runner.withArguments("publishToMavenLocal").build()
     val pomPath =
