@@ -8,15 +8,15 @@ import java.nio.file.Paths
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
+import kotlin.io.path.createDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.readText
+import kotlin.io.path.writeText
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.w3c.dom.NodeList
-import kotlin.io.path.createDirectories
-import kotlin.io.path.writeText
 
 @ExtendWith(GradleTestExtension::class)
 class SetupPublishingTest {
@@ -100,10 +100,11 @@ class SetupPublishingTest {
             .trimIndent()
     context.writeBuildScript(script)
 
-      val mainKotlinDir = context.workingDir.resolve(Paths.get("src", "main", "kotlin"))
-          .apply { createDirectories() }
-      mainKotlinDir.resolve("Runner.kt").apply {
-          writeText("""
+    val mainKotlinDir =
+        context.workingDir.resolve(Paths.get("src", "main", "kotlin")).apply { createDirectories() }
+    mainKotlinDir.resolve("Runner.kt").apply {
+      writeText(
+          """
               import org.springframework.boot.runApplication
               import org.springframework.boot.autoconfigure.SpringBootApplication
               
@@ -113,8 +114,9 @@ class SetupPublishingTest {
               fun main(args: Array<String>) {
                 runApplication<Runner>(*args)
               }
-          """.trimIndent())
-      }
+          """
+              .trimIndent())
+    }
 
     val result = context.runner.withArguments("publishToMavenLocal").build()
     val pomPath =
