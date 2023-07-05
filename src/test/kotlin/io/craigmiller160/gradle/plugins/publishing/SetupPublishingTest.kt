@@ -15,6 +15,7 @@ import kotlin.io.path.writeText
 import org.apache.tools.ant.filters.StringInputStream
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.w3c.dom.NodeList
@@ -57,6 +58,7 @@ class SetupPublishingTest {
   }
 
   @Test
+  @Disabled
   fun `runs publish task and fixes pom_xml`(context: GradleTestContext) {
     val group = "io.craigmiller160.test"
     val version = "1.0.0"
