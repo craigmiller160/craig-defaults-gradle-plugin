@@ -63,6 +63,7 @@ class SetupPublishingTest {
     val script =
         """
             import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+            import org.springframework.boot.gradle.tasks.bundling.BootJar
             
           plugins {
             id("io.craigmiller160.gradle.defaults") version "${context.pluginVersion}"
@@ -93,6 +94,10 @@ class SetupPublishingTest {
           
           dependencies {
             implementation("org.springframework.boot:spring-boot-starter-web")
+          }
+          
+          tasks.withType<BootJar> {
+              enabled = false
           }
           
           group = "$group"
