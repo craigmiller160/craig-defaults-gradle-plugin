@@ -83,7 +83,7 @@ class SetupPublishingTest {
           
           tasks.withType<KotlinCompile> {
               kotlinOptions {
-                  freeCompilerArgs = listOf("-Xjsr305=strict", "-Xcontext-receivers")
+                  freeCompilerArgs = listOf("-Xjsr305=strict")
                   jvmTarget = "19"
               }
           }
