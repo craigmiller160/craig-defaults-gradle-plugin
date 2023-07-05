@@ -12,6 +12,7 @@ import kotlin.io.path.createDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
+import org.apache.tools.ant.filters.StringInputStream
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -132,7 +133,8 @@ class SetupPublishingTest {
     val xml = pomPath.readText()
     println(xml)
 
-    val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xml)
+    val doc =
+        DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(StringInputStream(xml))
     val xPath = XPathFactory.newInstance().newXPath()
     val nodes =
         xPath.compile("/project/dependencyManagement").evaluate(doc, XPathConstants.NODESET)
