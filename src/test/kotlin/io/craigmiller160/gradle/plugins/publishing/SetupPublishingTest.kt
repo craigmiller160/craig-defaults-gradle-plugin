@@ -90,6 +90,10 @@ class SetupPublishingTest {
               }
           }
           
+          dependencies {
+            implementation("org.springframework.boot:spring-boot-starter-web")
+          }
+          
           group = "$group"
           version = "$version"
       """
