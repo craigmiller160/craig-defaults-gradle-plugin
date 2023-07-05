@@ -75,6 +75,8 @@ class SetupPublishingTest {
             mavenCentral()
           }
           
+          java.sourceCompatibility = JavaVersion.VERSION_19
+          
           dependencyManagement {
             imports {
               mavenBom("org.springdoc:springdoc-openapi:2.0.3")
