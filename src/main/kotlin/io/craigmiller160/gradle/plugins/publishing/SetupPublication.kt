@@ -32,7 +32,7 @@ fun Project.setupPublication() {
     publishing.repositories { repoHandler ->
       repoHandler.maven { mavenRepo ->
         val repo = if (version.endsWith("-SNAPSHOT")) "maven-snapshots" else "maven-releases"
-        mavenRepo.url = uri("https://nexus-craigmiller160.ddns.net/repository/$repo")
+        mavenRepo.url = uri("https://nexus.craigmiller160.us/repository/$repo")
         mavenRepo.name = "CraigNexus"
         mavenRepo.credentials { creds ->
           creds.username = System.getenv("NEXUS_USER")
